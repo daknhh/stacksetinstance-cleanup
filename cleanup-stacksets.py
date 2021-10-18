@@ -6,8 +6,7 @@ from tqdm import tqdm
 
 def delete_stack_set_instances(accountid,client,retain):
     allStack_sets = client.list_stack_sets(
-        Status='ACTIVE',
-        CallAs='SELF'
+        Status='ACTIVE'
     )
     if retain == 'yes':
         RetainStacks = True
@@ -18,8 +17,7 @@ def delete_stack_set_instances(accountid,client,retain):
     for stackset in tqdm(allStack_sets['Summaries'],desc="Progress"):
         instances = client.list_stack_instances(
         StackSetName=stackset['StackSetName'],
-        StackInstanceAccount=accountid,
-        CallAs='SELF')
+        StackInstanceAccount=accountid)
         
         if instances['Summaries'] != []:
             print(f"\n\nDeleting StackSetInstances {stackset['StackSetName']}")
@@ -33,8 +31,7 @@ def delete_stack_set_instances(accountid,client,retain):
                 Regions=[
                     instance['Region'],
                 ],
-                RetainStacks=RetainStacks,
-                CallAs='SELF'
+                RetainStacks=RetainStacks
                 )
                 operationid = response['OperationId']
                 finished = False
